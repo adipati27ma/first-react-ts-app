@@ -8,6 +8,7 @@
   align-items: center;
   background-color: #2f74c0;
   font-family: 'Neucha', cursive;
+  padding: 0 15px;
 }
 
 .heading {
@@ -19,9 +20,15 @@
   text-align: center;
 }
 
-@media (max-width: 800px) {
+@media only screen and (max-width: 800px) {
   .heading {
     margin: 15px 0;
     font-size: 35px;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .App {
+    padding: 0 5px;
   }
 }

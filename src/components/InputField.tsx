@@ -11,7 +11,7 @@ const InputField: React.FC<Props> = ({ todo, setTodo, handleAdd }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <>
+    <div className="input-wrapper">
       <form
         onSubmit={(e) => {
           handleAdd(e);
@@ -31,7 +31,7 @@ const InputField: React.FC<Props> = ({ todo, setTodo, handleAdd }: Props) => {
           Go
         </button>
       </form>
-    </>
+    </div>
   );
 };
 
