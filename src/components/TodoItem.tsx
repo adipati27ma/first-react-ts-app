@@ -3,14 +3,16 @@ import { Todo } from '../models/model';
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 import { MdDone } from 'react-icons/md';
 import './style.css';
+import { Draggable } from 'react-beautiful-dnd';
 
 type Props = {
+  index: number;
   todo: Todo;
   todos: Todo[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 };
 
-const TodoItem: React.FC<Props> = ({ todo, todos, setTodos }: Props) => {
+const TodoItem: React.FC<Props> = ({ index, todo, todos, setTodos }: Props) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editTodo, setEditTodo] = useState<string>(todo.todo);
 
@@ -49,34 +51,41 @@ const TodoItem: React.FC<Props> = ({ todo, todos, setTodos }: Props) => {
   }, [isEditing]);
 
   return (
-    <form
-      className={`todos__single`}
-      onSubmit={(e) => handleFinishEdit(e, todo.id)}
-    >
-      {isEditing ? (
-        <input
-          value={editTodo}
-          onChange={(e) => setEditTodo(e.target.value)}
-          className="todos__single--text"
-          ref={inputRef}
-        />
-      ) : todo.isDone ? (
-        <s className="todos__single--text">{todo.todo}</s>
-      ) : (
-        <span className="todos__single--text">{todo.todo}</span>
+    <Draggable draggableId={todo.id.toString()} index={index}>
+      {(provided) => (
+        <form
+          className={`todos__single`}
+          onSubmit={(e) => handleFinishEdit(e, todo.id)}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+        >
+          {isEditing ? (
+            <input
+              value={editTodo}
+              onChange={(e) => setEditTodo(e.target.value)}
+              className="todos__single--text"
+              ref={inputRef}
+            />
+          ) : todo.isDone ? (
+            <s className="todos__single--text">{todo.todo}</s>
+          ) : (
+            <span className="todos__single--text">{todo.todo}</span>
+          )}
+          <div>
+            <span className="icon" onClick={handleEditTodo}>
+              <AiFillEdit />
+            </span>
+            <span className="icon" onClick={() => handleDeleteTodo(todo.id)}>
+              <AiFillDelete />
+            </span>
+            <span className="icon" onClick={() => handleDoneTodo(todo.id)}>
+              <MdDone />
+            </span>
+          </div>
+        </form>
       )}
-      <div>
-        <span className="icon" onClick={handleEditTodo}>
-          <AiFillEdit />
-        </span>
-        <span className="icon" onClick={() => handleDeleteTodo(todo.id)}>
-          <AiFillDelete />
-        </span>
-        <span className="icon" onClick={() => handleDoneTodo(todo.id)}>
-          <MdDone />
-        </span>
-      </div>
-    </form>
+    </Draggable>
   );
 };
 
